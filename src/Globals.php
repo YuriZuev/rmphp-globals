@@ -25,12 +25,6 @@ class Globals {
 	public function __construct(ServerRequestInterface $request) {
 		if(class_exists(Session::class)) $this->session = new Session();
 		$this->request = $request;
-		define("INT", "INT");
-		define("SRTING", "STRING");
-	}
-
-	public function session() : Session {
-		return $this->session;
 	}
 
 	/**
@@ -68,6 +62,14 @@ class Globals {
 	 * @param string $name
 	 * @return bool
 	 */
+	public function isSession(string $name = "") : bool {
+		return (!empty($name)) ? isset($this->session->getSession()[$name]) : !empty($this->session->getSession());
+	}
+
+	/**
+	 * @param string $name
+	 * @return bool
+	 */
 	public function isFile(string $name = "") : bool {
 		return (!empty($name)) ? isset($this->request->getUploadedFiles()[$name]) : !empty($this->request->getUploadedFiles());
 	}
@@ -78,6 +80,8 @@ class Globals {
 	public function isStream() : bool {
 		return !empty($this->request->getBody()->getContents());
 	}
+
+
 
 	/**
 	 * @param string $name
@@ -108,6 +112,15 @@ class Globals {
 
 	/**
 	 * @param string $name
+	 * @param string $type
+	 * @return array|int|string
+	 */
+	public function session(string $name = "", string $type = "") {
+		return $this->onGlobal($this->session->getSession(), $name, $type);
+	}
+
+	/**
+	 * @param string $name
 	 * @return array|int|string
 	 */
 	public function files(string $name = "") {
@@ -128,18 +141,19 @@ class Globals {
 	 * @return array|int|string
 	 */
 	private function onGlobal(array $var, string $name, string $type = "") {
+		$name = strtolower($name);
 		if (!empty($name))
 		{
-			if (!isset($var[$name])) return [];
+			if (!isset($var[$name])) return null;
 
 			if (empty($type)) {
 				return $var[$name];
 			}
 			elseif ($type == self::STRING) {
-				return (!empty($var[$name])) ? (string)$var[$name] : [];
+				return (!empty($var[$name])) ? (string)$var[$name] : null;
 			}
 			elseif ($type == self::INT) {
-				return (!empty((int)$var[$name]) || $var[$name]==0) ? (int)$var[$name] : [];
+				return (!empty((int)$var[$name]) || $var[$name]==0) ? (int)$var[$name] : null;
 			}
 		}
 		return (isset($var)) ? $var : [];
