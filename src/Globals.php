@@ -25,6 +25,7 @@ class Globals {
 	public function __construct(ServerRequestInterface $request) {
 		if(class_exists(Session::class)) $this->session = new Session();
 		$this->request = $request;
+
 	}
 
 	/**
