@@ -13,7 +13,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class Globals {
 
 	private ServerRequestInterface $request;
-	private Session $session;
+	private $session;
 
 	const INT = "INT";
 	const STRING = "STRING";
@@ -23,7 +23,8 @@ class Globals {
 	 * @param ServerRequestInterface $request
 	 */
 	public function __construct(ServerRequestInterface $request) {
-		if(class_exists(Session::class)) $this->session = new Session();
+		session_name("usi");
+		$this->session = (session_start()) ?  $_SESSION : [];
 		$this->request = $request;
 
 
@@ -35,6 +36,7 @@ class Globals {
 	public function request() : ServerRequestInterface {
 		return $this->request;
 	}
+
 
 	/**
 	 * @param string $name
@@ -65,7 +67,7 @@ class Globals {
 	 * @return bool
 	 */
 	public function isSession(string $name = "") : bool {
-		return (!empty($name)) ? isset($this->session->getSession()[$name]) : !empty($this->session->getSession());
+		return (!empty($name)) ? isset($this->session[$name]) : !empty($this->session);
 	}
 
 	/**
@@ -118,7 +120,7 @@ class Globals {
 	 * @return array|int|string
 	 */
 	public function session(string $name = "", string $type = "") {
-		return $this->onGlobal($this->session->getSession(), $name, $type);
+		return $this->onGlobal($this->session, $name, $type);
 	}
 
 	/**
