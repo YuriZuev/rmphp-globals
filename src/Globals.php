@@ -26,6 +26,7 @@ class Globals {
 		if(class_exists(Session::class)) $this->session = new Session();
 		$this->request = $request;
 
+
 	}
 
 	/**
