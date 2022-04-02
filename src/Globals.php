@@ -18,6 +18,7 @@ class Globals {
 	const INT = "INT";
 	const STRING = "STRING";
 
+
 	/**
 	 * Globals constructor.
 	 * @param ServerRequestInterface $request
