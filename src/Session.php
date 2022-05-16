@@ -9,6 +9,7 @@
 namespace Rmphp\Globals;
 
 
+
 class Session {
 
 	public function __construct(string $name = "usi") {
