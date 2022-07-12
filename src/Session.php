@@ -12,8 +12,10 @@ namespace Rmphp\Globals;
 class Session {
 
 	public function __construct(string $name = "usi") {
-		session_name($name);
-		session_start();
+		if(session_status() !== PHP_SESSION_ACTIVE) {
+			session_name($name);
+			session_start();
+		}
 	}
 
 	/**
